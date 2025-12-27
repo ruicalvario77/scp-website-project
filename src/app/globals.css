@@ -22,33 +22,43 @@
   --color-brand-chartreuse: #D7ED5A;
   --color-brand-grey-sky: #ABB2BE;
 
-  /* Semantic Aliases (Professional Tweak) */
-  /* This allows you to use 'bg-primary' which points to Navy */
+  /* Semantic Aliases */
   --color-primary: var(--color-brand-navy);
   --color-accent: var(--color-brand-gold);
+
+  /* --- ANIMATIONS (Tailwind v4 Syntax) --- */
+  --animate-contour-drift: drift 20s ease-in-out infinite;
+  --animate-contour-pulse: pulse-slow 12s ease-in-out infinite;
+
+  @keyframes drift {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(4%, -2%) rotate(0.5deg); }
+    66% { transform: translate(-2%, 4%) rotate(-0.5deg); }
+  }
+
+  @keyframes pulse-slow {
+    0%, 100% { opacity: 0.35; }
+    50% { opacity: 0.75; }
+  }
 }
 
 @layer base {
   body {
-    /* Body Copy: 16px (1rem) on mobile -> 18px (1.125rem) on desktop */
     @apply font-dm font-normal text-base md:text-[18px] leading-6 text-slate-900 antialiased;
   }
 
-  /* h1 - Fluid: 50px -> 80px */
   h1 {
     @apply font-ramillas font-light tracking-normal;
     font-size: clamp(3.125rem, 2.817vw + 2.465rem, 5rem);
     line-height: clamp(3.438rem, 2.347vw + 2.887rem, 5rem);
   }
   
-  /* h2 - Fluid: 30px -> 40px */
   h2 {
     @apply font-ramillas font-light tracking-normal;
     font-size: clamp(1.875rem, 0.939vw + 1.655rem, 2.5rem);
     line-height: clamp(2.188rem, 1.221vw + 1.901rem, 3rem);
   }
 
-  /* h3 - Static Desktop (using H2 fluid logic for scaling if needed) */
   h3 {
     @apply font-ramillas font-light text-[32px] leading-10 tracking-normal;
   }
@@ -58,50 +68,40 @@
   }
 }
 
-/* CUSTOM UTILITIES */
+/* --- CUSTOM UTILITIES --- */
 
-/* h4 - Section Titles: 12px mobile -> 16px desktop */
 @utility text-section-title {
   @apply font-dm font-semibold text-[12px] md:text-[16px] leading-none tracking-[0.24em] uppercase;
 }
 
-/* h5 - Section Titles In Navigation */
 @utility text-nav-title {
   @apply font-dm font-semibold text-[12px] leading-none tracking-[0.16em] uppercase;
 }
 
-/* Section Subtitles: 16px mobile -> 24px desktop */
 @utility text-section-subtitle {
   @apply font-dm font-bold text-[16px] md:text-[24px] leading-5 md:leading-8 tracking-normal;
 }
 
-/* Paragraph - Body Copy: New style added */
 @utility text-body-copy {
   @apply font-dm font-normal text-[18px] leading-6 tracking-normal;
 }
 
-/* Section Paragraphs: Updated to leading-7.5 */
 @utility text-section-p {
   @apply font-dm font-normal text-[20px] md:text-[24px] leading-7.5 md:leading-8 tracking-normal text-center md:text-left;
 }
 
-/* Small Body Copy: Updated to leading-3.75 */
 @utility text-small {
   @apply font-dm font-normal text-[10px] md:text-[14px] leading-3.75 md:leading-4.5 tracking-normal;
 }
 
-
-/* Small Button: 14px mobile -> 16px desktop */
 @utility btn-small {
   @apply font-dm font-normal italic text-[14px] md:text-[16px] leading-5 tracking-normal;
 }
 
-/* Buttons - Standard (Kept static for clickability) */
 @utility btn-primary {
   @apply font-dm font-extrabold text-[14px] leading-16 tracking-normal uppercase inline-flex items-center justify-center px-8;
 }
 
-/* Mobile Small Copy: New style added for 10px font, 15px line height, and tracking (assuming 0.1em for '10') */
 @utility text-mobile-small-copy {
   @apply font-dm font-normal text-[10px] leading-3.75 tracking-widest;
 }
