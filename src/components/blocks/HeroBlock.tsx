@@ -6,25 +6,26 @@ import { useCallback } from 'react';
 import Image from 'next/image';
 
 export default function HeroBlock() {
+  // Utility function to scroll down exactly one viewport height
   const scrollToNextSection = useCallback(() => {
     window.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
   }, []);
 
-  // 1. "SCP" Gold letters: Staggered Bottom-to-Top fade in
+  // Animation config for "SCP": Staggered bottom-up fade-in effect
   const scpVariants: Variants = {
     hidden: { opacity: 0, y: 30 },
     visible: (i: number) => ({
       opacity: 1,
       y: 0,
       transition: { 
-        delay: i * 0.15, 
+        delay: i * 0.15, // Stagger delay based on index
         duration: 0.8, 
         ease: [0.215, 0.61, 0.355, 1] 
       }
     })
   };
 
-  // 2. "Resource Finance": Reveal from Left
+  // Animation config for "Resource Finance": Slide in from the left
   const wordmarkVariants: Variants = {
     hidden: { opacity: 0, x: -20 },
     visible: { 
@@ -34,25 +35,25 @@ export default function HeroBlock() {
     }
   };
 
-  // 3. Animation: Centered (Fixed Position) -> Relative Left (20% larger when settled)
+  // Animation config for the logo container: Animates from fixed-center to relative-left
   const logoLayout: Variants = {
     initial: { 
-      position: "fixed", // Start with fixed positioning relative to viewport
+      position: "fixed", // Start fixed in the viewport center
       top: "50%",
       left: "50%",
       x: "-50%",
       y: "-50%",
-      scale: 1.8, 
+      scale: 1.8, // Starts larger
       zIndex: 50,
-      opacity: 1, // Ensure it is visible from the start of the animation
+      opacity: 1,
     },
     animate: { 
-      position: "relative", // End with relative positioning in the flow
+      position: "relative", // Ends in normal document flow
       top: "0%", 
       left: "0%",
       x: "0%",
       y: "0%",
-      scale: 1.5, // Final size is 20% larger than originally defined
+      scale: 1.5, // Final size
       transition: { 
         delay: 2.8, 
         duration: 1.5, 
@@ -61,7 +62,7 @@ export default function HeroBlock() {
     }
   };
 
-  // 4. Content Reveal (Line, Text, Button)
+  // Animation config for main content: Staggered fade in after logo movement
   const contentVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
     visible: { 
@@ -73,7 +74,7 @@ export default function HeroBlock() {
 
   return (
     <section className="relative h-dvh -mt-26.5 overflow-hidden flex items-center bg-brand-cloud">
-      {/* Background Layer */}
+      {/* Background Layer (texture image) */}
       <div className="absolute inset-0 z-0">
         <Image 
           src="/hero-block-bg.svg" 
@@ -84,10 +85,10 @@ export default function HeroBlock() {
         />
       </div>
 
-      {/* Main Content Container (max-w-7xl is ~1280px) */}
+      {/* Main Content Container */}
       <div className="mx-auto max-w-7xl px-4 md:px-0 relative z-10 w-full flex flex-col justify-center h-full">
         
-        {/* LOGO AREA - Hidden on mobile screens (hidden on sm, flex on md and up) */}
+        {/* LOGO AREA (Desktop only) */}
         <div className="hidden sm:flex justify-start">
             <motion.div
                 variants={logoLayout}
@@ -96,7 +97,7 @@ export default function HeroBlock() {
                 layout
                 className="flex items-center space-x-4 md:space-x-6 mb-12 md:mb-32 mt-12 md:mt-32 origin-center md:origin-left" 
             >
-                {/* SCP Gold Text (Ramillas Font-Light from Global h1) */}
+                {/* "SCP" Text elements */}
                 <div className="flex">
                 {["S", "C", "P"].map((char, i) => (
                     <motion.span
@@ -116,7 +117,7 @@ export default function HeroBlock() {
                 ))}
                 </div>
 
-                {/* RESOURCE FINANCE (DM Sans Extralight, Uppercase, Navy) */}
+                {/* "Resource Finance" wordmark */}
                 <motion.span
                 variants={wordmarkVariants}
                 initial="hidden"
@@ -129,7 +130,7 @@ export default function HeroBlock() {
             </motion.div>
         </div>
 
-        {/* MAIN CONTENT Area */}
+        {/* MAIN CONTENT Area (Headline and Divider) */}
         <motion.div 
           variants={contentVariants} 
           initial="hidden" 
@@ -139,21 +140,19 @@ export default function HeroBlock() {
           {/* Gold Accent Line */}
           <div className="w-25 h-px bg-brand-gold mb-12 mx-auto md:mx-0"></div>
           
-          {/* Hero Headline (Using Global h3 Style) */}
+          {/* Hero Headline */}
           <h3 className="text-brand-navy w-full md:w-3/5 mb-24 mx-auto md:mx-0 px-12 md:px-0">
             We provide specialized capital, advisory and investment services to mid-market mining companies and their stakeholders.
           </h3>
           
         </motion.div>
 
-        {/* Scroll Indicator Button */}
+        {/* Scroll Indicator Button (Positions using absolute positioning on mobile, relative on desktop) */}
         <motion.button
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 4.5, duration: 1 }}
           onClick={scrollToNextSection}
-          // Positioning on mobile: absolute bottom-10 left-1/2 transform -translate-x-1/2
-          // Positioning on desktop: md:relative md:bottom-10 md:left-0 md:transform-none
           className="relative bottom-10 left-1/2 transform -translate-x-1/2 cursor-pointer 
                      size-8 bg-brand-blue rounded-full flex items-center justify-center 
                      transition-all duration-300 shadow-lg text-white hover:bg-brand-gold hover:-translate-y-1

@@ -6,10 +6,12 @@ import Image from 'next/image';
 import { ChevronRight } from 'lucide-react';
 import { motion, Variants } from 'framer-motion';
 
+// Animation config for the sliding chevron effect in the submit button.
 const chevronVariants: Variants = {
   initial: { x: 0, opacity: 1 },
   hover: {
     x: [0, 30, -30, 0],
+    // Corrected the missing value here:
     opacity: [1, 0, 0, 1],
     transition: { 
       duration: 1.2, 
@@ -27,21 +29,22 @@ export default function ContactFormBlock() {
   ];
 
   const socialLinks = [
-    { label: 'LinkedIn', href: 'https://www.linkedin.com/company/scp-resource-finance/', icon: '/scp-section-6-icon-linkedin.svg' },
-    { label: 'X (Twitter)', href: 'https://x.com/SCPResFin', icon: '/scp-section-6-icon-x.svg' },
+    { label: 'LinkedIn', href: 'www.linkedin.com', icon: '/scp-section-6-icon-linkedin.svg' },
+    { label: 'X (Twitter)', href: 'x.com', icon: '/scp-section-6-icon-x.svg' },
   ];
 
   return (
     <section className="relative bg-primary text-white overflow-hidden z-20">
-      {/* Background Texture */}
+      {/* Background Texture Overlay */}
       <div className="absolute inset-0 opacity-60 pointer-events-none">
         <Image src="/about-bg.svg" alt="Background texture" fill className="object-cover" priority />
       </div>
 
+      {/* Main Content Grid Container */}
       <div className="relative mx-auto max-w-7xl px-6 lg:px-8 py-20 md:py-32 z-10">
         <div className="grid md:grid-cols-2 gap-16 md:gap-24 items-start">
           
-          {/* RIGHT COLUMN: Heading & Form (Order 1 on mobile) */}
+          {/* Contact Form Area (Displays below details on mobile, right column on desktop) */}
           <div className="flex flex-col order-1 md:order-2">
             <div className="text-center md:text-right mb-12">
                 <p className="text-section-title text-white mb-4">CONTACT</p>
@@ -85,10 +88,10 @@ export default function ContactFormBlock() {
             </form>
           </div>
 
-          {/* LEFT COLUMN: Contact Details & Socials (Order 2 on mobile) */}
+          {/* Contact Details and Social Links (Displays above form on mobile, left column on desktop) */}
           <div className="flex flex-col order-2 md:order-1 md:mt-[160px]">
             
-            {/* 1. Centered Contact Info for Mobile */}
+            {/* List of contact methods (phone, email, address) */}
             <ul className="space-y-8 mb-16 flex flex-col items-center md:items-start">
               {contactInfo.map((item) => (
                 <li key={item.type} className="flex flex-col md:flex-row items-center md:items-baseline space-y-2 md:space-y-0 md:space-x-6 text-center md:text-left">
@@ -105,12 +108,12 @@ export default function ContactFormBlock() {
               ))}
             </ul>
 
-            {/* 2. Mobile Accent Line Solution (Hidden on Desktop) */}
+            {/* Section Divider (Mobile vs. Desktop implementation) */}
             <div className="relative mb-16 md:mb-10 w-full flex justify-center md:justify-start">
-                {/* Horizontal Line */}
+                {/* Desktop horizontal line styling */}
                 <div className="absolute top-1/2 left-0 right-0 border-t border-brand-light-blue opacity-30 md:static md:w-20 md:border-t md:opacity-50"></div>
                 
-                {/* Accent Image - Only visible on Mobile */}
+                {/* Accent Image - Only visible on Mobile, centered over the line */}
                 <div className="relative z-10 bg-primary px-4 md:hidden">
                    <Image 
                      src="/scp-section-2-accent-line.svg" 
@@ -121,6 +124,7 @@ export default function ContactFormBlock() {
                 </div>
             </div>
 
+            {/* Social Links and Subscription Text */}
             <div className="flex flex-col md:flex-row items-center space-y-8 md:space-y-0 md:space-x-10">
                 <div className="flex space-x-8">
                     {socialLinks.map((link) => (

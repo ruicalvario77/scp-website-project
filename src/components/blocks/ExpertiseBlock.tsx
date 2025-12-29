@@ -6,14 +6,11 @@ import { ChevronRight } from 'lucide-react';
 import { motion, Variants, useScroll, useSpring } from 'framer-motion';
 
 interface ExpertiseBlockProps {
-  /**
-   * anchorRef is passed from the parent page.tsx to mark the 
-   * end point for the cross-section animated line.
-   */
+  // Ref used to mark the end point for the cross-section animated scroll line.
   anchorRef?: React.RefObject<HTMLDivElement | null>;
 }
 
-// Bottom-up text reveal variants
+// Animation config for bottom-up text reveals.
 const textRevealVariant: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: { 
@@ -23,7 +20,7 @@ const textRevealVariant: Variants = {
   }
 };
 
-// Chevron sliding variants
+// Animation config for the sliding chevron effect.
 const chevronVariants: Variants = {
   initial: { x: 0, opacity: 1 },
   hover: {
@@ -69,16 +66,15 @@ const ExpertiseBlock = ({ anchorRef }: ExpertiseBlockProps) => {
     <section className="relative bg-white z-10">
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 md:py-32">
         
-        {/* Top Section: Uses order utilities to control flow on mobile vs desktop */}
+        {/* Top Section: Uses order utilities to control mobile vs desktop content flow */}
         <div className="flex flex-col md:flex-row gap-12 mb-20 md:mb-32">
           
-          {/* Right Column Content (Heading Group) - Appears first on mobile, second on desktop */}
+          {/* Heading Group (Order 1 mobile, 2 desktop) */}
           <motion.div 
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             variants={textRevealVariant}
-            // text-center for mobile, md:text-left for desktop (as requested by user)
             className="flex flex-col md:w-[60%] text-center md:text-left order-1 md:order-2"
           >
             <p ref={anchorRef} className="text-section-title text-slate-900 md:mt-16">EXPERTISE</p>
@@ -88,15 +84,14 @@ const ExpertiseBlock = ({ anchorRef }: ExpertiseBlockProps) => {
             </h1>
           </motion.div>
           
-          {/* Left Column Content (Paragraph) - Appears second on mobile, first on desktop */}
+          {/* Introduction Paragraph (Order 2 mobile, 1 desktop) */}
           <motion.div 
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             variants={textRevealVariant}
             transition={{ delay: 0.2 }}
-            // text-center for mobile, md:text-left for desktop (via custom utility)
-            className="flex flex-col justify-end pr-10 md:w-[40%] text-center md:text-left order-2 md:order-1"
+            className="flex flex-col justify-end pr-10 md:w-[40%] text-center md:text-left"
           >
             <p className="text-section-p text-slate-900">
               We enable growth in the resources ecosystem through a comprehensive and nimble offering backed by industry experts with unique cross-border perspectives.
@@ -105,7 +100,7 @@ const ExpertiseBlock = ({ anchorRef }: ExpertiseBlockProps) => {
           
         </div>
 
-        {/* Cards Section: Headings and Lines will be animated using variants */}
+        {/* Expertise Cards Section */}
         <div className="relative">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {expertiseAreas.map((area, i) => (
@@ -138,7 +133,7 @@ const ExpertiseBlock = ({ anchorRef }: ExpertiseBlockProps) => {
           </div>
         </div>
         
-        {/* "Learn More" Button alignment: centered on mobile, left on desktop */}
+        {/* "Learn More" CTA Button */}
         <div className="mt-20 md:mt-40 flex justify-center md:justify-start"> 
             <Link href="/expertise" className="group">
                 <motion.div 
@@ -159,6 +154,7 @@ const ExpertiseBlock = ({ anchorRef }: ExpertiseBlockProps) => {
 
       </div>
       
+      {/* Bottom section divider line */}
       <div className="absolute bottom-0 inset-x-0 h-px bg-brand-light-blue opacity-50"></div>
 
     </section>
@@ -168,15 +164,17 @@ const ExpertiseBlock = ({ anchorRef }: ExpertiseBlockProps) => {
 
 const LineDrawer = () => {
     const ref = React.useRef(null);
+    // Track scroll progress for this component to drive the line animation
     const { scrollYProgress } = useScroll({
       target: ref,
       offset: ["start end", "center center"] 
     });
     
+    // Smooth the scroll progress using a spring
     const scaleX = useSpring(scrollYProgress, { stiffness: 400, damping: 90 });
 
     return (
-        // flex justify-center on mobile, md:justify-start on desktop
+        // Container positioning for the line graphic
         <div ref={ref} className='relative py-8 flex justify-center md:justify-start'> 
             
             <div className='relative w-[65%] h-0.5'>
@@ -193,13 +191,12 @@ const LineDrawer = () => {
                     style={{ scaleX, originX: 'center' }} 
                 />
 
-                {/* Accent image overlay */}
+                {/* Accent image overlay: centered on mobile, left on desktop */}
                 <Image 
                     src="/scp-section-2-accent-line.svg" 
                     alt="Divider graphic" 
                     width={50} 
                     height={2} 
-                    // Centered on mobile, left-aligned on desktop within its container
                     className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 md:left-0 md:translate-x-0 z-10' 
                 />
             </div>

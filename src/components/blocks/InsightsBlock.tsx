@@ -7,7 +7,6 @@ import Link from 'next/link';
 import { ChevronRight } from 'lucide-react'; 
 import { motion, Variants, useScroll, useSpring } from 'framer-motion';
 
-// --- TYPES ---
 interface InsightArticle {
   id: string | number;
   title: string;
@@ -19,14 +18,14 @@ interface InsightsBlockProps {
   heading?: string;
   accentHeading?: string;
   articles?: InsightArticle[]; 
-  /**
-   * anchorRef is passed from the parent page.tsx to mark the 
-   * end point for the cross-section animated line from Transactions.
+  /** 
+   * Used to connect the animated scroll line coming from the Transactions section 
    */
   anchorRef?: React.RefObject<HTMLDivElement | null>;
 }
 
-// --- ANIMATION VARIANTS ---
+// --- Animation Variants ---
+
 const textRevealVariant: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: { 
@@ -39,19 +38,25 @@ const textRevealVariant: Variants = {
 const chevronVariants: Variants = {
   initial: { x: 0, opacity: 1 },
   hover: {
+    // Creates a "looping" arrow effect on hover
     x: [0, 30, -30, 0],
     opacity: [1, 0, 0, 1],
     transition: { duration: 1.2, times: [0, 0.48, 0.52, 1], ease: "easeInOut" }
   }
 };
 
-// --- REUSABLE LINE DRAWER ---
+// --- Sub-components ---
+
+/**
+ * Animated horizontal line that fills up as the user scrolls into the article
+ */
 const LineDrawer = () => {
     const ref = React.useRef(null);
     const { scrollYProgress } = useScroll({
       target: ref,
       offset: ["start end", "center center"] 
     });
+    
     const scaleX = useSpring(scrollYProgress, { stiffness: 400, damping: 90 });
 
     return (
@@ -77,13 +82,13 @@ const InsightsBlock = ({
   heading = "opportunity", 
   accentHeading = "Unearthing",
   articles,
-  anchorRef // Added anchorRef to props
+  anchorRef 
 }: InsightsBlockProps) => {
 
   const defaultArticles: InsightArticle[] = [
-    { id: 1, title: 'An examination of Gold’s 2024 prospects.', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt…', linkUrl: '#' },
-    { id: 2, title: 'State of the Gold and Minerals Trade - Recap and 2024 View - From Peter Grosskopf', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt…', linkUrl: '#' },
-    { id: 3, title: 'Fed Cred - An analysis of recent Federal Reserve policy and implications for gold.', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt…', linkUrl: '#' },
+    { id: 1, title: 'An examination of Gold’s 2024 prospects.', description: 'Lorem ipsum dolor sit amet...', linkUrl: '#' },
+    { id: 2, title: 'State of the Gold and Minerals Trade...', description: 'Lorem ipsum dolor sit amet...', linkUrl: '#' },
+    { id: 3, title: 'Fed Cred - An analysis of recent Federal Reserve policy...', description: 'Lorem ipsum dolor sit amet...', linkUrl: '#' },
   ];
 
   const displayArticles = articles || defaultArticles;
@@ -94,7 +99,7 @@ const InsightsBlock = ({
         
         <div className="flex flex-col md:flex-row gap-12 items-start">
           
-          {/* Left Column */}
+          {/* Sticky Header Column */}
           <motion.div 
             initial="hidden"
             whileInView="visible"
@@ -102,7 +107,7 @@ const InsightsBlock = ({
             variants={textRevealVariant}
             className="md:w-[40%] flex flex-col items-center md:items-end text-center md:text-right md:sticky md:top-32 h-fit z-20"
           >
-            {/* APPLY anchorRef here to catch the GlobalScrollLine path */}
+            {/* anchorRef marks the end point for the global scroll line */}
             <p ref={anchorRef} className="text-section-title text-brand-navy">INSIGHTS</p>
             
             <h1 className="text-brand-navy mt-8"> 
@@ -127,7 +132,7 @@ const InsightsBlock = ({
             </div>
           </motion.div>
           
-          {/* Right Column: Adjusted pt-44 to align first h3 with "opportunity" */}
+          {/* Article List Column */}
           <div className="md:w-[60%] md:pl-24 lg:pl-40 md:pt-44 z-20">
             <div className="flex flex-col gap-16 md:gap-24">
               {displayArticles.map((article, i) => (
@@ -163,7 +168,7 @@ const InsightsBlock = ({
         </div>
       </div>
       
-      {/* Background Contour Lines */}
+      {/* Decorative Background Elements */}
       <div className="absolute -bottom-20 -left-20 w-175 md:w-250 aspect-square opacity-20 pointer-events-none select-none z-0">
         <Image 
             src="/scp-section-4-element-contour-lines.svg" 

@@ -14,13 +14,13 @@ interface StatItem {
 
 interface TransactionsBlockProps {
   /**
-   * statRefs is an array of 3 refs passed from page.tsx 
-   * to anchor the start of the animated path for the GlobalScrollLine.
+   * These refs (passed from page.tsx) tell the animated 
+   * scroll line where to start for each stat column.
    */
   statRefs?: React.RefObject<HTMLDivElement | null>[];
 }
 
-// 1. Bottom-up text reveal variants (Consistent with AboutBlock)
+// Simple fade-up animation for text
 const textRevealVariant: Variants = {
   hidden: { 
     opacity: 0, 
@@ -36,6 +36,7 @@ const textRevealVariant: Variants = {
   }
 };
 
+// "Looping" arrow animation for the button hover
 const chevronVariants: Variants = {
   initial: { x: 0, opacity: 1 },
   hover: {
@@ -61,6 +62,7 @@ const TransactionsBlock: React.FC<TransactionsBlockProps> = ({ statRefs }) => {
   return (
     <section className="relative bg-brand-cloud z-10">
       
+      {/* Background Image Overlay */}
       <div className="absolute inset-0 z-0">
         <Image 
           src="/hero-block-bg.svg" 
@@ -75,7 +77,7 @@ const TransactionsBlock: React.FC<TransactionsBlockProps> = ({ statRefs }) => {
 
         <div className="grid md:grid-cols-5 gap-8 mb-20 md:mb-32 relative">
           
-          {/* LEFT COLUMN: Animated Text */}
+          {/* Main Messaging Column */}
           <motion.div 
             initial="hidden"
             whileInView="visible"
@@ -92,13 +94,12 @@ const TransactionsBlock: React.FC<TransactionsBlockProps> = ({ statRefs }) => {
               variants={textRevealVariant}
               transition={{ delay: 0.2 }}
               className="text-section-p text-primary mt-24 text-right" 
-              id="description-paragraph"
             > 
               Our mission is to be a long-term, trusted partner to corporates and investors immersed in the resources value chain by providing expert guidance, superior returns, and exceptional service. We invest alongside our clients.
             </motion.p>
           </motion.div> 
 
-          {/* RIGHT COLUMN: Dark Card */}
+          {/* Floating Dark Card (Desktop Only) */}
           <div className="hidden md:block md:col-span-2 relative h-full">
             <div className="absolute bottom-30 right-[-16px] lg:right-[-32px] w-[350px] md:w-[450px] top-[-400px] z-30">
                 <motion.div 
@@ -110,10 +111,10 @@ const TransactionsBlock: React.FC<TransactionsBlockProps> = ({ statRefs }) => {
                   className="relative bg-primary text-white shadow-2xl overflow-hidden h-full flex flex-col"
                   style={{ borderRadius: customCardRadius }}
                 >
+                    {/* Background Textures */}
                     <div className="absolute inset-0 opacity-60 pointer-events-none">
                         <Image src="/about-bg.svg" alt="Background texture" fill className="object-cover" />
                     </div>
-
                     <div className="absolute top-0 left-0 w-3/4 h-3/4 pointer-events-none opacity-90">
                         <Image
                             src="/scp-section-4-element-contour-lines.svg"
@@ -144,13 +145,13 @@ const TransactionsBlock: React.FC<TransactionsBlockProps> = ({ statRefs }) => {
           </div>
         </div>
 
-        {/* STATS SECTION: statRefs attached to each stat column */}
+        {/* Numbers/Stats Grid */}
         <div className="relative mt-32 md:mt-48 pb-12">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 text-left">
             {statsData.map((stat: StatItem, i: number) => (
               <motion.div 
                 key={i} 
-                // Attach the ref here so GlobalScrollLine can find the start/turn points
+                // Using the passed ref to anchor the global scroll-triggered lines
                 ref={statRefs?.[i]}
                 initial="hidden"
                 whileInView="visible"
@@ -161,8 +162,10 @@ const TransactionsBlock: React.FC<TransactionsBlockProps> = ({ statRefs }) => {
               >
                 <p className="font-serif font-light text-7xl md:text-[100px] leading-[56px] text-brand-blue">{stat.val}</p>
                 <p className="text-section-title text-brand-grey-sky mt-6 md:mt-10">{stat.label}</p>
+                
+                {/* Visual accent line below the stat */}
                 <div className='absolute bottom-[-77px] left-0 transform translate-y-1/2 z-10'>
-                   <Image src="/scp-section-2-accent-line.svg" alt="Divider graphic" width={50} height={2} />
+                   <Image src="/scp-section-2-accent-line.svg" alt="Divider" width={50} height={2} />
                 </div>
               </motion.div>
             ))}
