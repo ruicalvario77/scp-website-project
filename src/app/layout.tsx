@@ -3,19 +3,20 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import { DM_Sans } from 'next/font/google';
 import './globals.css';
-import Navbar from '@/components/Navbar'; // Imported
-import Footer from '@/components/Footer'; // Imported
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 
-// Load DM Sans (Google Font) with required weights and styles
+// Configure Google Font (DM Sans) with necessary weights
 const dmSans = DM_Sans({
-  weight: ['400', '600', '700', '800'],
+  weight: ['100', '200', '300', '400', '600', '700', '800'],
   style: ['normal', 'italic'],
   subsets: ['latin'],
   variable: '--font-sans',
   display: 'swap',
 });
 
-// Load TT Ramillas (custom local font) - files now in app/fonts/
+
+// Configure local font (TT Ramillas)
 const ttRamillas = localFont({
   src: [
     {
@@ -33,26 +34,24 @@ const ttRamillas = localFont({
   display: 'swap',
 });
 
+// Metadata for SEO purposes
 export const metadata: Metadata = {
   title: 'SCP Resource Finance',
   description: 'Specialized capital, advisory and investment services for mid-market mining companies',
 };
 
+// Root layout component that wraps the entire application
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    // 'scroll-smooth' utility class enables the smooth "Back to Top" button behavior
+    <html lang="en" className="scroll-smooth">
       <body className={`${dmSans.variable} ${ttRamillas.variable} antialiased overflow-x-hidden`}>
-        {/* ADDED NAVBAR HERE */}
         <Navbar /> 
-        
-        {/* The main page content goes here */}
-        {children} 
-        
-        {/* ADDED FOOTER HERE */}
+        <main>{children}</main> {/* Wrap dynamic content in a semantic main tag */}
         <Footer /> 
       </body>
     </html>
